@@ -1,0 +1,39 @@
+---
+- name: Gather facts
+  setup:
+
+- name: Get Java tarball
+  get_url:
+    url: https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz
+    dest: /etc/open-jdk11.tar.gz
+
+- name: make java 11 directory
+  file:
+    path: /usr/lib/java11
+    state: directory
+
+- name: unpack tarball
+  unarchive:
+    dest: /usr/lib/java11
+    src: /etc/open-jdk11.tar.gz
+    remote_src: yes
+
+- name: update alternatives for java
+  alternatives:
+    name: java
+    path: /usr/lib/java11/jdk-11.0.2/bin/java
+    link: /usr/bin/java
+    priority: 20000
+
+- name: update alternatives for javac
+  alternatives:
+    name: javac
+    path: /usr/lib/java11/jdk-11.0.2/bin/javac
+    link: /usr/bin/javac
+    priority: 20000
+
+- name: set java home as environment variable
+  blockinfile:
+    insertafter: EOF
+    path: /etc/environment
+    block: export JAVA_HOME=/usr/lib/java11/jdk-11.0.2

@@ -1,0 +1,19 @@
+cluster.name: {{ cluster_name }}
+network:
+  publish_host: {{ ansible_facts['all_ipv4_addresses'] | last }}
+  bind_host: 0.0.0.0
+
+http.port: {{ elasticsearch_http_port_range }}
+transport.tcp.port: 9300
+
+node.master: {{ is_master_node }}
+node.name: {{ node_name }}
+
+path:
+  logs: /var/log/elasticsearch
+  data: /var/lib/elasticsearch
+
+discovery:
+  zen:
+    ping.unicast.hosts: [ '{{ hostvars['elasticsearchNode1']['ansible_facts']['all_ipv4_addresses'] | last }}:9300', '{{ hostvars['elasticsearchNode2']['ansible_facts']['all_ipv4_addresses'] | last }}:9300', '{{ hostvars['elasticsearchNode3']['ansible_facts']['all_ipv4_addresses'] | last }}:9300' ]
+    minimum_master_nodes: 2

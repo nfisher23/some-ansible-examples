@@ -1,0 +1,9 @@
+---
+
+node_name: example_node
+is_master_node: true
+
+elasticsearch_deb_version: 6.3.0
+elasticsearch_deb_file: elasticsearch-{{ elasticsearch_deb_version }}.deb
+cluster_name: my_cluster_name
+elasticsearch_http_port_range: 9200-9300
