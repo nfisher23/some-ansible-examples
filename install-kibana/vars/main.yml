@@ -1,0 +1,3 @@
+---
+# vars file for install-kibana
+kibana_deb_file: kibana-6.4.0-amd64.deb

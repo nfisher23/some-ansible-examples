@@ -1,0 +1,22 @@
+---
+# tasks file for install-kibana
+- name: download deb file
+  get_url:
+    dest: "/etc/{{ kibana_deb_file }}"
+    url: "https://artifacts.elastic.co/downloads/kibana/{{ kibana_deb_file }}"
+    checksum: "sha512:https://artifacts.elastic.co/downloads/kibana/{{ kibana_deb_file }}.sha512"
+  become: yes
+
+- name: install kibana from deb file
+  apt:
+    deb: "/etc/{{ kibana_deb_file }}"
+    update_cache: yes
+  become: yes
+
+- name: send kibana config file
+  template:
+    dest: /etc/kibana/kibana.yml
+    src: kibana.yml.j2
+  become: yes
+  notify: restart kibana
+
