@@ -1,0 +1,14 @@
+input {
+  beats {
+    host => "{{ ansible_facts['all_ipv4_addresses'] | last }}"
+    port => "5044"
+  }
+}
+filter {
+
+}
+output {
+  elasticsearch {
+    hosts => ["192.168.56.101:9200", "192.168.56.102:9200", "192.168.56.103:9200"]
+  }
+}

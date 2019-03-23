@@ -1,0 +1,30 @@
+---
+# tasks file for install-logstash
+- name: ensure Java is installed
+  apt:
+    name: "openjdk-8-jdk"
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: download deb package
+  get_url:
+    dest: "/etc/{{ logstash_deb_file }}"
+    url: "https://artifacts.elastic.co/downloads/logstash/{{ logstash_deb_file }}"
+    checksum: "sha512:https://artifacts.elastic.co/downloads/logstash/{{ logstash_deb_file }}.sha512"
+  become: yes
+
+- name: install from deb package
+  apt:
+    deb: "/etc/{{ logstash_deb_file }}"
+  become: yes
+  notify: restart logstash
+
+- name: setup conf filter
+  template:
+    dest: /etc/logstash/conf.d/my-pipeline.conf
+    src: my-pipeline.conf.j2
+    force: yes
+    mode: 0644
+  become: yes
+  notify: restart logstash

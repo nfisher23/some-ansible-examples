@@ -1,0 +1,3 @@
+---
+# vars file for install-logstash
+logstash_deb_file: logstash-6.4.0.deb
