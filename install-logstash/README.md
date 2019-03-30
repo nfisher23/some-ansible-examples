@@ -5,4 +5,4 @@ An introductory demo for how to install logstash on multiple nodes using ansible
 
 Pairs well with install-elasticsearch-cluster, in a directory above this one.
 
-See accompanying blog post: [How to Install Multiple Logstash Hosts Using Ansible](https://nickolasfisher.com/blog/How-to-Install-Multiple-Logstash-Hosts-Using-Ansible).
+See accompanying blog post: [How to Provision Multiple Logstash Hosts Using Ansible](https://nickolasfisher.com/blog/How-to-Provision-Multiple-Logstash-Hosts-Using-Ansible).
