@@ -47,11 +47,11 @@ provisioner:
         is_master_node: true
         es_version_to_upgrade_to: elasticsearch-6.5.3.deb
       elasticsearchNode2:
-        node_name: es_node_1
+        node_name: es_node_2
         is_master_node: true
         es_version_to_upgrade_to: elasticsearch-6.5.3.deb
       elasticsearchNode3:
-        node_name: es_node_1
+        node_name: es_node_3
         is_master_node: false
         es_version_to_upgrade_to: elasticsearch-6.5.3.deb
   lint:

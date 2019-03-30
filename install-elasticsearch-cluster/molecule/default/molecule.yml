@@ -46,10 +46,10 @@ provisioner:
         node_name: es_node_1
         is_master_node: true
       elasticsearchNode2:
-        node_name: es_node_1
+        node_name: es_node_2
         is_master_node: true
       elasticsearchNode3:
-        node_name: es_node_1
+        node_name: es_node_3
         is_master_node: false
   lint:
     name: ansible-lint
