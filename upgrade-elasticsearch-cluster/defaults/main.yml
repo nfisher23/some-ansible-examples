@@ -1,0 +1,3 @@
+---
+# defaults file for upgrade-elasticsearch-cluster
+upgrade_es: false

@@ -1,0 +1,7 @@
+---
+# handlers file for upgrade-elasticsearch-cluster
+- name: wait for elasticsearch to start
+  wait_for:
+    host: 127.0.0.1
+    port: 9200
+    delay: 5

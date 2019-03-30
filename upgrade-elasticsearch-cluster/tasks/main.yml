@@ -1,0 +1,2 @@
+- include: upgrade_es.yml
+  when: upgrade_es

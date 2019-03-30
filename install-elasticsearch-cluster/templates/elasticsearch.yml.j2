@@ -15,5 +15,5 @@ path:
 
 discovery:
   zen:
-    ping.unicast.hosts: [ '{{ hostvars['elasticsearchNode1']['ansible_facts']['all_ipv4_addresses'] | last }}:9300', '{{ hostvars['elasticsearchNode2']['ansible_facts']['all_ipv4_addresses'] | last }}:9300', '{{ hostvars['elasticsearchNode3']['ansible_facts']['all_ipv4_addresses'] | last }}:9300' ]
+    ping.unicast.hosts: [ '192.168.56.101:9300', '192.168.56.102:9300', '192.168.56.103:9300' ]
     minimum_master_nodes: 2

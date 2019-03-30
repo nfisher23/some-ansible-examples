@@ -1,0 +1,80 @@
+---
+# tasks file for upgrade-elasticsearch-cluster
+- name: ensure elasticsearch already present
+  service:
+    name: elasticsearch
+    state: started
+  become: yes
+
+- name: ensure elasticsearch is up and available
+  wait_for:
+    host: 127.0.0.1
+    port: 9200
+    delay: 5
+
+- name: get elasticsearch to upgrade to
+  get_url:
+    dest: "/etc/{{ es_version_to_upgrade_to }}"
+    url: "https://artifacts.elastic.co/downloads/elasticsearch/{{ es_version_to_upgrade_to }}"
+    checksum: "sha512:https://artifacts.elastic.co/downloads/elasticsearch/{{ es_version_to_upgrade_to }}.sha512"
+  become: yes
+
+- name: perform upgrade process as root
+  block:
+    - name: disable shard allocation
+      uri:
+        url: http://127.0.0.1:9200/_cluster/settings
+        body: '{"persistent":{"cluster.routing.allocation.enable":"none"}}' # specify no shard allocation
+        body_format: json
+        method: PUT
+      
+    - name: stop non essential indexing to speed up shard recovery
+      uri:
+        url: http://127.0.0.1:9200/_flush/synced
+        method: POST
+      ignore_errors: yes
+
+    - name: get cluster id
+      uri:
+        url: http://127.0.0.1:9200
+      register: pre_upgrade_cluster_info
+
+    - name: shut down node
+      service:
+        name: elasticsearch
+        state: stopped
+
+    - name: upgrade node
+      apt:
+        deb: "/etc/{{ es_version_to_upgrade_to }}"
+
+    - name: bring up node
+      service:
+        name: elasticsearch
+        state: started
+      notify: wait for elasticsearch to start
+
+    - meta: flush_handlers
+
+    - name: validate it joins cluster
+      uri:
+        url: http://127.0.0.1:9200
+      register: post_upgrade_cluster_info
+      until: pre_upgrade_cluster_info.json.cluster_uuid == post_upgrade_cluster_info.json.cluster_uuid
+      retries: 3
+      delay: 10
+
+    - name: reenable shard allocation
+      uri: 
+        url: http://127.0.0.1:9200/_cluster/settings
+        body: '{"persistent":{"cluster.routing.allocation.enable":null}}' # reenabling the setting removes shard allocation
+        body_format: json
+        method: PUT
+
+    - name: wait for elasticsearch to recover
+      script: check_es_health.py
+      register: es_recovery_response
+      until: es_recovery_response.rc == 0
+      retries: 15
+      delay: 10
+  become: yes
