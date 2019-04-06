@@ -1,0 +1,4 @@
+---
+# tasks file for upgrade-kibana
+- include: upgrade_kibana.yml
+  when: upgrade_kibana

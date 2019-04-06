@@ -1,0 +1,29 @@
+- name: ensure kibana already up and running
+  service: 
+    name: kibana
+    state: started
+  become: yes
+
+- name: get kibana deb to dl
+  get_url:
+    dest: "/etc/{{ kibana_deb_to_upgrade_to }}"
+    url: "https://artifacts.elastic.co/downloads/kibana/{{ kibana_deb_to_upgrade_to }}"
+    checksum: "sha512:https://artifacts.elastic.co/downloads/kibana/{{ kibana_deb_to_upgrade_to }}.sha512"
+  become: yes
+
+- name: stop kibana
+  service:
+    name: kibana
+    state: stopped
+  become: yes
+
+- name: upgrade
+  apt:
+    deb: "/etc/{{ kibana_deb_to_upgrade_to }}"
+  become: yes
+
+- name: start upgraded kibana
+  service:
+    name: kibana
+    state: started
+  become: yes

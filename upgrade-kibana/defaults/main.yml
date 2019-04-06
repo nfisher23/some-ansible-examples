@@ -1,0 +1,4 @@
+---
+# defaults file for upgrade-kibana
+upgrade_kibana: false
+kibana_deb_to_upgrade_to: kibana-6.5.3-amd64.deb
