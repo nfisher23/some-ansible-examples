@@ -1,0 +1,40 @@
+---
+- name: ensure logstash already present
+  service:
+    name: logstash
+    state: started
+  become: yes
+
+- name: upgrade as root
+  block:
+  - name: get logstash deb version
+    get_url:
+      dest: "/etc/{{ ls_version_to_upgrade_to }}"
+      url: "https://artifacts.elastic.co/downloads/logstash/{{ ls_version_to_upgrade_to }}"
+      checksum: "sha512:https://artifacts.elastic.co/downloads/logstash/{{ ls_version_to_upgrade_to }}.sha512"
+    become: yes
+
+  - name: shut down instance
+    service:
+      name: logstash
+      state: stopped
+
+  - name: install new version
+    apt:
+      deb: "/etc/{{ ls_version_to_upgrade_to }}"
+  
+  - name: test configuration files
+    shell: /usr/share/logstash/bin/logstash -t "--path.settings" "/etc/logstash"
+  
+  - name: restart pipeline
+    service:
+      name: logstash
+      state: started
+
+  - name: wait for logstash to come up
+    wait_for:
+      host: 127.0.0.1
+      port: 9600
+      delay: 5
+    
+  become: yes

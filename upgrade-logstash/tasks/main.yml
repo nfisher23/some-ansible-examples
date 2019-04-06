@@ -1,0 +1,4 @@
+---
+# tasks file for upgrade-logstash
+- include: upgrade_ls.yml
+  when: upgrade_ls
