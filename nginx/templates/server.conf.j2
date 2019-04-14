@@ -1,11 +1,23 @@
+{% if nginx_use_cache %}
+proxy_cache_path {{ nginx_cache_path }} levels=1:2 keys_zone={{ nginx_cache_name }}:10m max_size=10g 
+                 inactive=60m use_temp_path=off;
+{% endif %}
+
 server {
     location / {
+{% if nginx_use_cache %}
+        proxy_cache {{ nginx_cache_name }};
+        proxy_ignore_headers Cache-Control;
+        proxy_cache_valid any 60s;
+{% endif %}
         proxy_pass http://localhost:{{ app_port }};
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection keep-alive;
         proxy_set_header Host $http_host;
+{% if not nginx_use_cache %}        
         proxy_cache_bypass $http_upgrade;
+{% endif %}
     }
 }
 

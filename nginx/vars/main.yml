@@ -3,3 +3,7 @@
 app_port: 8080
 site_alias: my-site
 remove_nginx_defaults: true
+
+nginx_cache_path: /etc/nginx/cache
+nginx_cache_name: my_cache
+nginx_use_cache: true
