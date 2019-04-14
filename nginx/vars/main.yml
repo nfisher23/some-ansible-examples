@@ -1,0 +1,5 @@
+---
+# vars file for nginx
+app_port: 8080
+site_alias: my-site
+remove_nginx_defaults: true

@@ -1,0 +1,38 @@
+---
+- name: Get Java tarball
+  get_url: 
+    url: "{{ jdk_url }}"
+    dest: /etc/{{ jdk_tarball }}
+  become: yes
+
+- name: make java directory
+  file: 
+    path: "/usr/lib/openjdk-{{ jdk_version }}"
+    state: directory
+  become: yes
+
+- name: unpack tarball
+  unarchive: 
+    dest: "/usr/lib/openjdk-{{ jdk_version }}/"
+    src: /etc/{{ jdk_tarball }}
+    remote_src: yes
+  become: yes
+
+- name: update alternatives for java
+  alternatives:
+    name: java
+    path: "/usr/lib/openjdk-{{ jdk_version }}/jdk-{{ jdk_version }}/bin/java"
+    link: /usr/bin/java
+    priority: 2000
+  become: yes
+
+- name: set java environment variable
+  blockinfile:
+    insertafter: EOF
+    path: /etc/environment
+    block: export JAVA_HOME=/usr/lib/openjdk-{{ jdk_version }}/jdk-{{ jdk_version }}
+  become: yes
+
+- name: re-source env variables
+  shell: . /etc/environment
+  become: yes

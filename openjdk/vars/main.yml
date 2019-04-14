@@ -1,0 +1,5 @@
+---
+# vars file for openjdk
+jdk_version: 11.0.2
+jdk_tarball: openjdk-{{ jdk_version }}_linux-x64_bin.tar.gz
+jdk_url: "https://download.java.net/java/GA/jdk11/9/GPL/{{ jdk_tarball }}"

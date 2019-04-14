@@ -1,0 +1,10 @@
+[Unit]
+Description=slow server to demonstrate caching
+
+[Service]
+WorkingDirectory={{ jar_dir }}
+ExecStart=/usr/bin/java -jar {{ path_to_jar }}
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,34 @@
+---
+# tasks file for nginx
+- name: install nginx
+  apt:
+    name: nginx
+    update_cache: yes
+  become: true
+
+- name: install nginx conf file
+  template:
+    dest: /etc/nginx/sites-available/{{ site_alias }}.conf 
+    src: server.conf.j2
+  become: yes
+
+- name: link nginx conf file
+  file:
+    src: /etc/nginx/sites-available/{{ site_alias }}.conf
+    dest: /etc/nginx/sites-enabled/{{ site_alias }}.conf
+    state: link
+  become: yes
+
+- name: remove nginx defaults
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /etc/nginx/sites-available/default
+    - /etc/nginx/sites-enabled/default
+  become: yes
+  when: remove_nginx_defaults
+
+- name: reload nginx
+  command: nginx -s reload
+  become: yes

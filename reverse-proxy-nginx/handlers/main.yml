@@ -1,0 +1,8 @@
+---
+# handlers file for reverse-proxy-nginx
+- name: restart app
+  systemd:
+    name: app.service 
+    daemon_reload: yes 
+    state: restarted 
+  become: yes

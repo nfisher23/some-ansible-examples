@@ -1,0 +1,35 @@
+---
+# tasks file for reverse-proxy-nginx
+- name: ensure files dir empty
+  file:
+    path: ../../files/{{ jar_name }}
+    state: absent
+  delegate_to: localhost
+
+- name: build solution and move jar to files
+  shell: pwd && cd ../../app && mvn clean install && cp target/*.jar ../files/{{ jar_name }}
+  delegate_to: localhost
+
+- name: ensure apps dir exists
+  file:
+    path: "{{ jar_dir }}" 
+    state: directory
+    mode: 0755
+  become: yes
+  
+- name: send jar
+  copy:
+    src: "{{ jar_name }}"
+    dest: "{{ path_to_jar }}"
+    mode: 0755
+    force: yes
+  become: yes
+  notify: restart app
+
+- name: setup service file
+  template:
+    src: app.service.j2
+    dest: /etc/systemd/system/app.service
+  become: yes
+  notify: restart app
+

@@ -1,0 +1,5 @@
+---
+# vars file for reverse-proxy-nginx
+jar_dir: /opt/apps/app
+jar_name: app.jar
+path_to_jar: "{{ jar_dir }}/{{ jar_name }}"
