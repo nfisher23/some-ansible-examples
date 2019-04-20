@@ -7,3 +7,4 @@ remove_nginx_defaults: true
 nginx_cache_path: /etc/nginx/cache
 nginx_cache_name: my_cache
 nginx_use_cache: true
+nginx_cache_invalidate_script_name: invalidate_nginx_cache

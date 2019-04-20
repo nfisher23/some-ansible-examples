@@ -9,7 +9,7 @@ lint:
   name: yamllint
 platforms:
   - name: reverse-proxy
-    box: ubuntu/xenial64
+    box: ubuntu/bionic64
     memory: 1024
     provider_raw_config_args:
     - "customize ['modifyvm', :id, '--uartmode1', 'disconnected']"

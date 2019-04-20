@@ -18,6 +18,7 @@
     dest: /etc/nginx/sites-enabled/{{ site_alias }}.conf
     state: link
   become: yes
+  notify: restart nginx
 
 - name: remove nginx defaults
   file:
@@ -28,6 +29,14 @@
     - /etc/nginx/sites-enabled/default
   become: yes
   when: remove_nginx_defaults
+
+- name: add invalidate cache script to path
+  template:
+    src: invalidate_cache.sh.j2
+    dest: "/usr/bin/{{ nginx_cache_invalidate_script_name }}"
+    mode: 0755
+  become: yes
+  notify: restart nginx
 
 - name: reload nginx
   command: nginx -s reload
