@@ -1,14 +1,18 @@
 {
-    "node_name": "example",
+    "node_name": "{{ node_name }}",
     "addresses": {
         "http": "{{ ansible_facts['all_ipv4_addresses'] | last }} 127.0.0.1"
     },
-    "server": true,
+    "server": {{ is_server }},
     "advertise_addr": "{{ ansible_facts['all_ipv4_addresses'] | last }}",
     "client_addr": "127.0.0.1 {{ ansible_facts['all_ipv4_addresses'] | last }}",
     "connect": {
         "enabled": true
     },
     "data_dir": "{{ consul_data_dir }}",
+{% if is_server == 'false' %}
+    "start_join": [ "{{ hostvars['consulServer']['ansible_all_ipv4_addresses'] | last }}"]
+{% else %}
     "bootstrap": true
+{% endif %}
 }
