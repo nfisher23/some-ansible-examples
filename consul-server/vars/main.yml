@@ -1,0 +1,7 @@
+---
+# vars file for consul-server
+consul_version: 1.4.2
+consul_zip_file: consul_{{ consul_version }}_linux_amd64.zip
+consul_install_dir: /usr/local/bin
+consul_config_dir: /etc/consul
+consul_data_dir: /var/data
