@@ -28,6 +28,14 @@
     - "{{ consul_data_dir }}"
   become: yes
 
+- name: send consul watch script
+  copy:
+    dest: "{{ consul_config_dir }}/watch_script.py"
+    src: watch_script.py
+    mode: 0777 # restrict this mode more in production
+    owner: root
+  become: yes
+
 - name: send consul configuration file
   template: 
     dest: "{{ consul_config_dir }}/config.json"

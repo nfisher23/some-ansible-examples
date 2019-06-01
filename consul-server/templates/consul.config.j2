@@ -10,6 +10,12 @@
         "enabled": true
     },
     "data_dir": "{{ consul_data_dir }}",
+    "watches": [
+        {
+            "type": "checks",
+            "handler": "{{ consul_config_dir }}/watch_script.py"
+        }
+    ],
 {% if is_server == 'false' %}
     "start_join": [ "{{ hostvars['consulServer']['ansible_all_ipv4_addresses'] | last }}"]
 {% else %}
